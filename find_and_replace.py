@@ -9,6 +9,6 @@ for i in str:
 		new += i
 
 print('Creating new file, give some time.')
-create = open('newfile.csv','w')
+create = open(old_file + ' (fixed)','w')
 create.write(new)
 create.close()
