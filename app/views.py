@@ -2,19 +2,19 @@ from app import app
 import os
 from flask import Flask, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
+import string
 
 ALLOWED_EXTENSIONS = ['csv', 'txt']
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
-def fixit(old_file):
-	with open(old_file, 'r', -1, encoding='utf-8') as myfile:
-	    str = myfile.read()
+def fixit(file):
+	old = file.read()
 	new = ""
-	for i in str:
-		if i in string.printable or i == "'":
-			new += i
+	for i in old:
+		if str(i) in string.printable or i == "'":
+			new += str(i)
 	create = open('fixed','w')
 	create.write(new)
 	create.close()
@@ -33,8 +33,8 @@ def upload_file():
             print('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            file = fixit(file)
-            filename = secure_filename(file.filename)
+            #filename = secure_filename(file.filename)
+            filename = fixit(file)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return redirect(url_for('upload_file',
                                     filename=filename))
