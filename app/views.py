@@ -4,20 +4,25 @@ from flask import Flask, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 import string
 
+count_variables = 0
 ALLOWED_EXTENSIONS = ['csv', 'txt']
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 def fixit(file):
-	old = file.read()
-	new = ""
-	for i in old:
-		if str(i) in string.printable or i == "'":
-			new += str(i)
-	create = open('fixed','w')
-	create.write(new)
-	create.close()
+    old = file.read()
+    new = ""
+    global count_variables
+    for i in old:
+        if str(i) in string.printable or i == "'":
+            new += str(i)
+    else:
+        count_variables += 1
+    create = open(str(count_variables) + 'fixes.csv','w')
+    create.write(new)
+    create.close()
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
