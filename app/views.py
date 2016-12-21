@@ -20,7 +20,7 @@ def fixit(file):
             new += str(i)
     else:
         count_variables += 1
-    create = open(str(count_variables) + 'fixes.csv','w')
+    create = open(str(count_variables) '(fixed).csv','w')
     create.write(new)
     create.close()
 
